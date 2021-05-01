@@ -1,0 +1,40 @@
+{{# if success }}
+  
+{{else}}
+  {{# if errors}}
+    <section class="errors">
+      <ul>
+        {{# each errors }}
+          <li>{{ this.msg }}</li>
+        {{/each}}
+      </ul>
+    </section>
+  {{/if}}
+  <div class="d-flex align-items-center justify-content-center">
+  <div class="card" style="width: 40%; box-shadow: 0 0 10px 0 rgba(63, 140, 255, 0.438); border-radius: 15px;">
+
+      
+      <div class="card-body">
+        <h4 class="card-title text-center text-primary">Sign In</h4>
+        <form>
+          <div class = "input">
+            <label for = "loginusername" style = "display: block;"> Username </label>
+            <input type = "text" class="form-control" id = "loginusername" name = "loginusername">
+          </div>
+          <div class = "input">
+            <label for = "loginpassword" style = "display: block;"> Password </label>
+            <input type = "password" class="form-control" id = "loginpassword" name = "loginpassword">
+          </div>
+          <br/>
+          <br/>
+          <button type = "submit" class="btn btn-primary rounded-btn" formaction="/user" formmethod="post">Log In</button>
+          <button type="submit" class="btn text-primary fake-link-btn" formaction="/forgotPassword" formmethod="post" style="font-size: initial;">Forgot Password?</button>
+          <button type = "submit" class="btn btn-primary rounded-btn" formaction="/register" formmethod="post" style="float: right; margin-left: 5px;">Register</button>
+
+          <button type = "submit" class="btn btn-secondary rounded-btn" formaction="/restart-db" formmethod="post" style="float: right;">Restart DB</button>
+        </form>
+      </div>
+  </div>
+  </div>
+{{/if}}
+

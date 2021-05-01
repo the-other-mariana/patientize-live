@@ -1,0 +1,237 @@
+<section>
+    <script src="/javascripts/update-details.js"></script>
+    <script>
+        var now = new Date();
+        var month = (now.getMonth() + 1);               
+        var day = now.getDate();
+        if (month < 10) 
+            month = "0" + month;
+        if (day < 10) 
+            day = "0" + day;
+        var today = now.getFullYear() + '-' + month + '-' + day + "T13:45";
+        $('#rappointment').val(today);
+        $('#pappointment').val(today);
+
+        function idButton(e){
+            let soMany = 10;
+            console.log(`This is ${soMany} times easier!`);
+        }
+
+        function idTemplate(e) {
+            console.log("Edit Doc: " + e.id);
+            var buttonId = e.id
+            target = $('#' + e.id).data('target');
+            console.log("Target: " + target);
+            var decodedJson = decodeURIComponent("{{{patJSON}}}");
+            var jsonObj = JSON.parse(decodedJson);
+            console.log("From server: " + jsonObj.name);
+            var docIndex = parseInt((buttonId).replace('doc', ''));
+            docInfo = jsonObj.documents[docIndex];
+            console.log(docInfo);
+
+            var keys = Object.keys(docInfo);
+            if (docInfo[keys[0]] == "template") {
+                // key 0: type
+                // key 1: ttitle
+                // key 2: tcolor
+                var modal = $(target);
+                for (var k = 3; k < keys.length; k++) {
+                    console.log(keys[k] + ": " + docInfo[keys[k]]);
+                    modal.find('#' + keys[k]).val(docInfo[keys[k]]);
+                }
+                var id = docInfo[keys[1]].split(' ').join('');
+                modal.find('#Submit' + id + 'Edit').attr('formaction', '/patient/editDoc/' + docIndex);
+            }
+            
+        }
+    </script>
+
+    <label class="btn btn-secondary rounded-btn" style="margin-bottom: 20px;">
+        Details: {{ patientName }}
+    </label>
+    <div class="card" id="patientDetails" style="margin-bottom: 20px; box-shadow: 0 0 10px 0 rgba(63, 140, 255, 0.438); border-radius: 15px;">
+        <div class="card-body">
+
+            <h3 class="text-primary">Last Name, Name</h3>
+            
+
+            <p class="patient-gender">Gender</p>
+            <p class="patient-mobile">Mobile</p>
+            <p class="patient-email">Email</p>
+            <p class="patient-birth">Birth Date</p>
+            <p class="patient-age">Age</p>
+
+        </div>
+    </div>
+
+    <div style="display: inline;">
+        
+        <label class="btn btn-secondary rounded-btn" style="margin-bottom: 20px;">
+            Medical Documents
+        </label>
+        <button type="button" class="btn btn-primary rounded-btn" data-toggle="modal" data-target="#prescriptionModal" style="margin-bottom: 20px;">
+        Prescription
+        </button>
+        <div id="buttonsSection" style="display: inline;">
+            <!-- BUTTONS GO HERE -->
+        </div>
+        
+    </div>
+    
+    <div class="card" id="patientDocs" style="margin-bottom: 20px; box-shadow: 0 0 10px 0 rgba(63, 140, 255, 0.438); border-radius: 15px;">
+        <!-- DOCS WHO HERE -->
+        <div id="docSection">
+
+        </div>
+    </div>
+
+    <!-- TEMPLATES -->
+    
+    <!-- EMPTY SPACES -->
+    <div id="noRecordsLabel" style="display: none;">
+        <label class="btn btn-light text-primary rounded-btn" style="margin: 0px; background-color: #f0f5fa;">
+            No Clinical Records Yet
+        </label>
+    </div>
+    <div id="noDocsLabel" style="display: none;">
+        <label class="btn btn-light text-primary rounded-btn" style="margin: 0px; background-color: #f0f5fa;">
+            No Documents Yet
+        </label>
+    </div>
+
+    <!-- Modal RECORD -->
+    <div class="modal fade bd-example-modal-lg" id="recordModal" tabindex="-1" role="dialog" aria-labelledby="recordModal" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-primary" id="exampleModalLongTitle">New Clinical Record</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form action="/patient/addRecord" method="post" class="">
+            <div class="modal-body">
+                <div class = "input" >
+
+                    <div class="form-group row">
+                        <label for="rappointment" class="col-sm-4 col-form-label col-form-label-lg">Appointment: </label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="datetime-local" value="" id="rappointment" name="rappointment">
+                        </div>
+                    </div>
+
+                    <label for = "rmotive" style = "display: block;"> Motive: </label>
+                    <input type = "text" class="form-control" id = "rmotive" name = "rmotive">
+
+                    <label for = "rresults" style = "display: block;"> Exploration Results: </label>
+                    <textarea class="form-control" id="rresults" name="rresults" rows="3" style="margin-bottom: 10px;"></textarea>
+
+                    <label for = "rdiagnosis" style = "display: block;"> Diagnosis: </label>
+                    <input type = "text" class="form-control" id="rdiagnosis" name="rdiagnosis">
+
+                    <label for = "rtreatment" style = "display: block;"> Treatment: </label>
+                    <textarea class="form-control" id="rtreatment" name="rtreatment" rows="3" style="margin-bottom: 10px;"></textarea>
+                    
+                </div>
+                <br/>
+                <br/>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECORD TEMPLATE -->
+    <div id="recordTemplate" style="display: none;">
+        <div class="card text-left" style="margin: 10px;">
+            <div class="card-body">
+                <form action='' method="get" class="cr-form">
+                    <div style="display: inline;">
+                        <h5 class="text-primary" style="color:blue; display: inline;">CR-Index: </h5>
+                        <h5 class="cr-timestamp" style="display: inline">Date and Time</h5>
+                    </div>
+
+                    <div style="float: right; display: inline;">
+                        <button type="button" class="btn btn-primary" style="margin-right: 5px;">Edit</button>
+                        <button type="button" class="btn btn-danger" >Delete</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+    <!-- PRESCRIPTION TEMPLATE -->
+    <div id="prescriptionTemplate" style="display: none;">
+        <div class="card text-left" style="margin: 10px; box-shadow: 0 0 10px 0 rgba(63, 140, 255, 0.438); border-radius: 15px;">
+            <div class="card-body">
+                <form action='' method="get" class="cr-form">
+                    <div style="display: inline;">
+                        <h5 class="text-primary" style="color:blue; display: inline;">PRESC-Index: </h5>
+                        <h5 class="p-timestamp" style="display: inline">Date and Time</h5>
+                    </div>
+                    <div style="display: block;">
+                    <h5 class="p-diagnosis">Diagnosis</h5>
+                    </div>
+                    <div style="float: right; display: inline;">
+                        <button type="button" class="btn btn-secondary" style="margin-right: 5px;">Download</button>
+                        <button type="button" class="btn btn-primary" style="margin-right: 5px;">Edit</button>
+                        <button type="button" class="btn btn-danger" >Delete</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal PRESCRIPTION -->
+    <div class="modal fade bd-example-modal-lg" id="prescriptionModal" tabindex="-1" role="dialog" aria-labelledby="prescriptionModal" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-primary" id="exampleModalLongTitle">New Prescription</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form action="/patient/addPrescription" method="post" class="">
+            <div class="modal-body">
+                <div class = "input" >
+
+                    <div class="form-group row">
+                        <label for="pappointment" class="col-sm-4 col-form-label col-form-label-lg">Appointment: </label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="datetime-local" value="" id="pappointment" name="pappointment">
+                        </div>
+                    </div>
+
+                    <label for = "pdoctor" style = "display: block;"> Doctor: </label>
+                    <input type = "text" class="form-control" id="pdoctor" name="pdoctor">
+
+                    <label for = "pdgp" style = "display: block;"> DGP: </label>
+                    <input type = "text" class="form-control" id="pdgp" name="pdgp">
+
+                    <label for = "pdiagnosis" style = "display: block;"> Diagnosis: </label>
+                    <input type = "text" class="form-control" id="pdiagnosis" name="pdiagnosis">
+
+                    <label for = "pindications" style = "display: block;"> Indications: </label>
+                    <textarea class="form-control" id="pindications" name="pindications" rows="3" style="margin-bottom: 10px;"></textarea>
+                    
+                </div>
+                <br/>
+                <br/>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id = "templateModalsSection"></div>
+</section>

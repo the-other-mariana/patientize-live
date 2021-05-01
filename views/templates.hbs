@@ -1,0 +1,127 @@
+<section>
+    <script src="/javascripts/update-templates.js"></script>
+<script>
+    var i = 0
+    function appendNewField(){
+        var fieldsSection = $('#fieldsSection');
+        var fieldTemplate = $('#fieldTemplate');
+        fieldTemplate.find('.nameField').attr('name', 'nameField-' + i);
+        fieldTemplate.find('.typeField').attr('name', 'typeField-' + i);
+
+        fieldsSection.append(fieldTemplate.html());
+        i += 1;
+    }
+    function newTemplate(){
+        i = 0
+        $('#fieldsSection').empty();
+    }
+</script>
+<div class="card text-center" style="box-shadow: 0 0 10px 0 rgba(63, 140, 255, 0.438); border-radius: 10px;">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+            <form action="/home" method="post">
+                <button type="submit" class="btn btn-light">Profile</button>
+            </form>
+            </li>
+            <li class="nav-item">
+                <form action="/patients" method="post">
+                <button type="submit" class="btn btn-light">Patients</button>
+                </form>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link active" href="#">Templates</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <button type="button" class="btn btn-primary rounded-btn" data-toggle="modal" data-target="#templateModal" onclick="newTemplate()">
+        Add Template
+        </button>
+
+        <!-- TEMPLATES GO HERE -->
+        <div id="templatesSection">
+
+        </div>
+    </div>
+</div>
+</section>
+<!-- Modal TEMPLATE -->
+<div class="modal fade bd-example-modal-lg" id="templateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">New Template</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/addTemplate" method="post">
+                <div class="modal-body text-center">
+                    <div class="form-group row">
+                        <label for="ttitle" class="col-sm-4 col-form-label col-form-label-lg">Template Title:</label>
+                        <div class="col-sm-4">
+                            <input type = "text" class="form-control nameField" id = "ttitle" name = "t-title">
+                        </div>
+                        <label for="tcolor" class="col-sm-2 col-form-label col-form-label-lg">Color:</label>
+                        <div class="col-sm-2">
+                            <input type="color" class="form-control" id="tcolor" name="t-color" value="#ff0000"></input>
+                        </div>
+                    </div>
+                    <div id="fieldsSection"></div>
+                    <button type="button" class="btn btn-primary rounded-btn" onclick="appendNewField()">Add Field</button>
+                    <br/>
+                    <br/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-btn" data-dismiss="modal">Dismiss</button>
+                    <button type="submit" class="btn btn-primary rounded-btn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- FIELD TEMPLATE -->
+<div class = "input" id="fieldTemplate" style="display: none;">
+    <div class="form-group row">
+        <label for="fname" class="col-sm-2 col-form-label col-form-label-lg">Field: </label>
+        <div class="col-sm-4">
+            <input type = "text" class="form-control nameField" id = "fname" name = "fname">
+        </div>
+        <label for="ftype" class="col-sm-2 col-form-label col-form-label-lg">Type: </label>
+        <div class="col-sm-4">
+            <select class="form-control typeField" id = "ftype" name = "atemplate" style="margin-top: 8px;">
+                <option value="date">Date</option>
+                <option value="text">Small Text</option>
+                <option value="text area">Big Text</option>
+                <option value="yes/no">Yes/No Question</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- TEMPLATE TEMPLATE -->
+<div id="templateTemplate" style="display: none;">
+    <div class="card text-left" style="margin-top: 20px;">
+        <div class="card-header" style="display: none;">
+            Template #
+        </div>
+        <div class="card-body">
+            <form action='/patientDetails' method="get" class="test">
+
+                <h3 class="text-primary" style="color:blue;">Last Name, Name</h3>
+
+                <p class="patient-gender">Gender</p>
+                <p class="patient-mobile">Mobile</p>
+                <p class="patient-email">Email</p>
+                <p class="patient-age">Age</p>
+
+                <button type="submit" class="btn btn-primary rounded-btn">Details</button>
+                <button type="button" class="btn btn-danger rounded-btn" style="float: right;">Delete</button>
+            </form>
+            
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,204 @@
+<section>
+<script src="/javascripts/update-patients.js"></script>
+<script>
+    var now = new Date();
+
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+    var today = now.getFullYear()+"-"+(month)+"-"+(day);
+    $('#pbirth').prop(today);
+    $('#pbirth').val(today);
+
+    function idPatient(e){
+        console.log("Edit Pat: " + e.id);
+            var buttonId = e.id
+            var decodedJson = decodeURIComponent("{{{patJSON}}}");
+            var jsonObj = JSON.parse(decodedJson);
+            
+            var patIndex = parseInt((buttonId).replace('pat', ''));
+            console.log("From server: " + jsonObj[patIndex].name);
+            patInfo = jsonObj[patIndex];
+            console.log(patInfo);
+
+            var modal = $('#editPatientModal');
+
+            modal.find('#eplname').val(jsonObj[patIndex].lastname);
+            modal.find('#epname').val(jsonObj[patIndex].name);
+            modal.find('#epemail').val(jsonObj[patIndex].email);
+            modal.find('#epmobile').val(jsonObj[patIndex].mobile);
+            modal.find('#epbirth').val(jsonObj[patIndex].birthdate);
+
+            modal.find('.submit-btn').attr('formaction', '/editPatient/' + patIndex);
+    }
+</script>
+
+<div class="card text-center" style="box-shadow: 0 0 10px 0 rgba(63, 140, 255, 0.438); border-radius: 10px;">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+            <form action="/home" method="post">
+                <button type="submit" class="btn btn-light">Profile</button>
+            </form>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link active" href="#">Patients</a>
+            </li>
+            <li class="nav-item">
+                <form action="/templates" method="post">
+                <button type="submit" class="btn btn-light">Templates</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <button type="button" class="btn btn-primary rounded-btn" data-toggle="modal" data-target="#patientModal">
+        Add Patient
+        </button>
+
+        <!-- PATIENTS GO HERE -->
+        <div id="patientSection">
+
+        </div>
+    </div>
+</div>
+
+
+<!-- NEW PATIENT TEMPLATE -->
+<div id="patientTemplate" style="display: none;">
+    <div class="card text-left" style="margin-top: 20px; border-radius: 10px;">
+        <div class="card-header" style="display: none;">
+            Patient #
+        </div>
+        <div class="card-body">
+            <form action='/patientDetails' method="get" class="test">
+
+                <button type="submit" class="btn text-primary fake-link-btn">Last Name, Name</button>
+
+                <p class="patient-gender">Gender</p>
+                <p class="patient-mobile">Mobile</p>
+                <p class="patient-email">Email</p>
+                <p class="patient-age">Age</p>
+
+                
+            </form>
+            <form action='/deletePatient' method="get" class="test2">
+                <button type="submit" class="btn btn-danger rounded-btn" style="float: right; margin-right: 5px;">Delete</button>
+                <button type="button" class="btn btn-primary rounded-btn edit-btn" data-toggle="modal" data-target="#editPatientModal" style="float: right; margin-right: 5px;" onclick="idPatient(this);">Edit</button>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Modal PATIENT -->
+    <div class="modal fade" id="patientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">New Patient</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form>
+            <div class="modal-body">
+                <div class = "input">
+                    <label for = "plname" style = "display: block;"> Last Name(s): </label>
+                    <input type = "text" class="form-control" id = "plname" name = "plname">
+                </div>
+                <div class = "input">
+                    <label for = "pname" style = "display: block;"> Name: </label>
+                    <input type = "text" class="form-control" id = "pname" name = "pname">
+                </div>
+                <div class = "input">
+                    <label for = "pemail" style = "display: block;"> Email: </label>
+                    <input type = "text" class="form-control" id = "pemail" name = "pemail">
+                </div>
+                <div class = "input">
+                    <label for = "pmobile" style = "display: block;"> Mobile: </label>
+                    <input type = "text" class="form-control" id = "pmobile" name = "pmobile">
+                </div>
+
+                <div class = "input">
+                    <label for = "pgender" style = "display: block;"> Gender </label>
+                    <select class="form-control" id = "pgender" name = "pgender">
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                    </select>
+                </div>
+
+                <div class="input">
+                    <label for="pbirth" style = "display: block;">Birth Date:</label>
+                    <div class="col-10">
+                        <input class="form-control" type="date" id="pbirth" name="pbirth">
+                    </div>
+                </div>
+                <br/>
+                <br/>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary rounded-btn" data-dismiss="modal">Dismiss</button>
+              <button type="submit" class="btn btn-primary rounded-btn" formaction="/addPatient" formmethod="post">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal EDIT PATIENT -->
+    <div class="modal fade" id="editPatientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Edit Patient</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form>
+            <div class="modal-body">
+                <div class = "input">
+                    <label for = "eplname" style = "display: block;"> Last Name(s): </label>
+                    <input type = "text" class="form-control" id = "eplname" name = "eplname">
+                </div>
+                <div class = "input">
+                    <label for = "epname" style = "display: block;"> Name: </label>
+                    <input type = "text" class="form-control" id = "epname" name = "epname">
+                </div>
+                <div class = "input">
+                    <label for = "epemail" style = "display: block;"> Email: </label>
+                    <input type = "text" class="form-control" id = "epemail" name = "epemail">
+                </div>
+                <div class = "input">
+                    <label for = "epmobile" style = "display: block;"> Mobile: </label>
+                    <input type = "text" class="form-control" id = "epmobile" name = "epmobile">
+                </div>
+
+                <div class = "input">
+                    <label for = "epgender" style = "display: block;"> Gender </label>
+                    <select class="form-control" id = "epgender" name = "epgender">
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                    </select>
+                </div>
+
+                <div class="input">
+                    <label for="epbirth" style = "display: block;">Birth Date:</label>
+                    <div class="col-10">
+                        <input class="form-control" type="date" id="epbirth" name="epbirth">
+                    </div>
+                </div>
+                <br/>
+                <br/>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary rounded-btn" data-dismiss="modal">Dismiss</button>
+              <button type="submit" class="btn btn-primary rounded-btn submit-btn" formaction="/editPatient" formmethod="get">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+</section>

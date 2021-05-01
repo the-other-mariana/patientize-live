@@ -1,0 +1,90 @@
+body {
+  font-family: 'Trebuchet MS', sans-serif;
+  padding-top: 40px;
+  background-color:#caddf3;
+  padding: 20px;
+}
+
+.welcome {
+  font-size: 18px;
+  display: inline;
+  padding: 5px;
+}
+
+.jumbotron {
+  background-color: #f0f5fa!important;
+}
+
+.row{
+  padding-bottom: 10px;
+}
+
+.container{
+  padding: 0px;
+}
+
+p {
+  margin-bottom: 5px;
+}
+
+.modal-header {
+  background-color: #ffffff;
+  color: #1980ff;
+}
+
+.modal-footer {
+  background-color: #ffffff;
+}
+
+.modal-body
+{
+  background-color: #ffffff;
+}
+
+.loader{
+  float: right!important;
+}
+
+select{
+  border-color: #1980ff;
+}
+
+textarea, select {
+  border: 1px solid #85c1ff !important;
+}
+
+input[type=text],
+input[type=date],
+input[type=datetime-local],
+input[type=password]{
+  border-color: #85c1ff;
+}
+
+input[type=color]{
+  border: 0px solid;
+}
+
+input[type="color"] {
+  padding: 2px;
+  height: 40px;
+  width: 50px;
+  vertical-align: middle;
+} 
+
+.rounded-btn {
+  border-radius: 10px;
+}
+
+.rounded-btn:hover {
+  box-shadow: 0 0 10px 0 rgba(54, 117, 255, 0.678);
+}
+
+.fake-link-btn {
+  background-color: transparent; 
+  padding:0px; 
+  font-size:x-large;
+}
+
+.fake-link-btn:hover {
+  text-decoration:underline;
+}
