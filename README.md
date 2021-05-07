@@ -101,3 +101,18 @@ If you cannot remember your Patientize user password, click on the Forgot Passwo
 Then, enter the email you put in your account. After that, click on Send and we will send you an email with your password. <br />
 
 ![image](https://github.com/the-other-mariana/patientize/blob/master/evidences/email-body.png?raw=true) <br />
+
+## Heroku deployment
+
+Driver: Node.js <br />
+Version: 2.2.12 or later <br />
+
+```
+$ git add .
+$ git commit -s -m 'commit'
+$ heroku git:remote -a patientize
+$ git push heroku master
+$ heroku open
+```
+
+- https://www.youtube.com/watch?v=nm7gWyZvdVU&t=311s
