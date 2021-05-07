@@ -3,7 +3,7 @@ var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var nodemailer = require('nodemailer');
 //const url = 'mongodb://localhost:27017/patientizedb';
-const url = 'mongodb+srv://patientize-admin01:patientize123@cluster0.4mq2h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+const url = 'mongodb+srv://patientize-admin01:patientize123@cluster0.4mq2h.mongodb.net/doctors?retryWrites=true&w=majority';
 const webtitle = 'Patientize';
 
 var currUser = null;
